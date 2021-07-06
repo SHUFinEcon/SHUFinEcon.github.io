@@ -1,0 +1,85 @@
+---
+title: "Consumption Function Estimate - Canada"
+output: html_notebook
+---
+
+
+
+```{r}
+install.packages("Ecdat")
+install.packages("DT")
+install.packages("Rcmdr")
+install.packages("effects")
+
+library(Ecdat)
+library(DT)
+library(Rcmdr)
+library(effects)
+
+```
+
+
+
+```{r}
+help("Consumption", package="Ecdat")                         # information about the data
+data(Consumption, package="Ecdat")
+```
+
+
+```{r}
+View(Consumption)
+```
+
+
+```{r}
+summary(Consumption)
+```
+
+```{r}
+scatterplot(ce~yd, 
+            main="Consumption Function Scatterplot - Canada",
+            regLine=FALSE, 
+             smooth=FALSE, 
+           boxplots=FALSE, 
+           data=Consumption)
+```
+
+
+```{r}
+scatterplot(ce~yd, 
+            regLine=TRUE, smooth=FALSE, boxplots=FALSE, 
+            main="scatterplot with a regression line and a few edits", 
+            cex=1.4, cex.axis=1.2, cex.lab=1.2, pch=c(19), data=Consumption)
+```
+
+Model: Consumption Function Estimate
+
+```{r}
+consfun<-glm(ce~yd, family=gaussian(identity), data=Consumption)
+summary(consfun)
+```
+
+
+
+```{r}
+consfun2<-lm(ce~yd, data=Consumption)
+summary(consfun2)
+```
+
+
+
+```{r}
+plot(allEffects(consfun, partial.residuals=FALSE), 
+                       show.fitted=FALSE,
+                       band.colors="red",         # change the band colour
+                       band.transparency=0.9, # change the band transparency
+                       main="Consumption Function - Canada")
+```
+```{r}
+plot(allEffects(consfun, partial.residuals=TRUE), 
+                       show.fitted=TRUE,
+                       band.colors="red",         # change the band colour
+                       band.transparency=0.9, # change the band transparency
+                       main="Consumption Function - Canada")
+```
+
